@@ -25,7 +25,7 @@
 #  define PARAMS(args)        ()
 #endif
 
-char *base64_encodei PARAMS((char *in));
+char *base64_encode PARAMS((char *in));
 void usage PARAMS((void));
 int sock_connect PARAMS((const char *hname, int port));
 int main PARAMS((int argc, char *argv[]));
@@ -41,15 +41,10 @@ char linefeed[] = "\r\n\r\n"; /* it is better and tested with oops & squid */
 ** Copyright (C) 2001 Tamas SZERB <toma@rulez.org>
 */
 
-const static char base64[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const static char base64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /* the output will be allocated automagically */
-#ifdef ANSI_FUNC
-char *base64_encode (char *in)
-#else
-char * base64_encode (in)
-char *in;
-#endif
+char *base64_encode(char *in)
 {
 	char *src, *end;
 	char *buf, *ret;
@@ -121,23 +116,13 @@ char *in;
 	return ret;
 }
 
-#ifdef ANSI_FUNC
-void usage (void)
-#else
-void usage ()
-#endif
+void usage(void)
 {
 	printf("corkscrew %s (agroman@agroman.net)\n\n", VERSION);
 	printf("usage: corkscrew <proxyhost> <proxyport> <desthost> <destport> [authfile]\n");
 }
 
-#ifdef ANSI_FUNC
-int sock_connect (const char *hname, int port)
-#else
-int sock_connect (hname, port)
-const char *hname;
-int port;
-#endif
+int sock_connect(const char *hname, int port)
 {
 	int fd;
 	struct sockaddr_in addr;
@@ -161,19 +146,9 @@ int port;
 	return fd;
 }
 
-#ifdef ANSI_FUNC
-int main (int argc, char *argv[])
-#else
-int main (argc, argv)
-int argc;
-char *argv[];
-#endif
+int main(int argc, char *argv[])
 {
-#ifdef ANSI_FUNC
 	char uri[BUFSIZE] = "", buffer[BUFSIZE] = "", version[BUFSIZE] = "", descr[BUFSIZE] = "";
-#else
-	char uri[BUFSIZE], buffer[BUFSIZE], version[BUFSIZE], descr[BUFSIZE];
-#endif
 	char *host = NULL, *desthost = NULL, *destport = NULL;
 	char *up = NULL;
 	int port, sent, setup, code, csock;
