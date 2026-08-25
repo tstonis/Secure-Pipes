@@ -6,23 +6,15 @@
 #  Created by Timothy Stonis on 11/12/14.
 #  Copyright (c) 2014 Timothy Stonis. All rights reserved.
 
-echo "Making: $1..." 
+set -eu
 
-if [ $1 = clean ]; then
-  echo "Cleaning old distribution..."
-  make distclean
+if [ "${1:-}" = clean ]; then
+  rm -f corkscrew
   exit 0
 fi
 
-echo "Running configure script..."
-./configure --host=i386-pc-mach3
-
-echo "Running make..."
-
-if [ ! -e Makefile ]; then
-  echo "Error: Configure failed to produce Makefile"
-  exit 1
-else 
-  make
-fi
-
+set -- xcrun --sdk macosx clang -DHAVE_CONFIG_H -I. -std=gnu99 -O2 corkscrew.c -o corkscrew
+for arch in ${ARCHS:-arm64}; do
+  set -- "$@" -arch "$arch"
+done
+exec "$@"
